@@ -63,21 +63,21 @@ fi
 
 # 下载并安装docker-compose-plugin
 info "下载docker-compose-plugin..."
-# 阿里云镜像站没有docker-compose-plugin包，使用Docker官方镜像站
-wget https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-compose-plugin-2.27.1-1.el7.x86_64.rpm -O /tmp/docker-compose-plugin-2.27.1-1.el7.x86_64.rpm
+# 优先从Gitee代理地址下载，如果失败再从Docker官方镜像站下载
+wget https://gitee.com/fustack/docker-install/releases/download/docker-compose-plugin-2.27.1-1.el7.x86_64/docker-compose-plugin-2.27.1-1.el7.x86_64.rpm -O /tmp/docker-compose-plugin-2.27.1-1.el7.x86_64.rpm
 
 if [ $? -eq 0 ] && [ -s /tmp/docker-compose-plugin-2.27.1-1.el7.x86_64.rpm ]; then
-    info "安装docker-compose-plugin..."
+    info "从Gitee代理地址下载成功，安装docker-compose-plugin..."
     rpm -ivh /tmp/docker-compose-plugin-2.27.1-1.el7.x86_64.rpm
     if [ $? -ne 0 ]; then
         error "docker-compose-plugin安装失败。如果提示 'docker-compose-plugin-2.27.1-1.el7.x86_64: [Errno 256] No more mirrors to try'，请手动下载并安装：\n下载页面：https://download.docker.com/linux/centos/7/x86_64/stable/Packages/\n下载地址：https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-compose-plugin-2.27.1-1.el7.x86_64.rpm\n下载后上传到服务器，然后执行：rpm -ivh 软件包名"
     fi
 else
-    warning "从Docker官方镜像站下载失败，尝试从Gitee备用源下载..."
-    wget https://gitee.com/fustack/docker-install/releases/download/docker-compose-plugin-2.27.1-1.el7.x86_64/docker-compose-plugin-2.27.1-1.el7.x86_64.rpm -O /tmp/docker-compose-plugin-2.27.1-1.el7.x86_64.rpm
+    warning "从Gitee代理地址下载失败，尝试从Docker官方镜像站下载..."
+    wget https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-compose-plugin-2.27.1-1.el7.x86_64.rpm -O /tmp/docker-compose-plugin-2.27.1-1.el7.x86_64.rpm
     
     if [ $? -eq 0 ] && [ -s /tmp/docker-compose-plugin-2.27.1-1.el7.x86_64.rpm ]; then
-        info "从Gitee备用源下载成功，安装docker-compose-plugin..."
+        info "从Docker官方镜像站下载成功，安装docker-compose-plugin..."
         rpm -ivh /tmp/docker-compose-plugin-2.27.1-1.el7.x86_64.rpm
         if [ $? -ne 0 ]; then
             error "docker-compose-plugin安装失败。请手动下载并安装：\n下载页面：https://download.docker.com/linux/centos/7/x86_64/stable/Packages/\n下载地址：https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-compose-plugin-2.27.1-1.el7.x86_64.rpm\n下载后上传到服务器，然后执行：rpm -ivh 软件包名"
