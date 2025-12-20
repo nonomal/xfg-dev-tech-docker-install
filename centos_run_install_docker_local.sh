@@ -20,17 +20,14 @@ error() {
     exit 1
 }
 
-# 定义下载URL和本地文件名
-DOCKER_SCRIPT_URL="https://gitee.com/fustack/docker-install/releases/download/v1.2/install_docker_v1.2.sh"
-LOCAL_SCRIPT_NAME="install_docker_v1.2.sh"
+# 定义本地脚本文件名
+LOCAL_SCRIPT_NAME="centos_install_docker.sh"
 
-info "开始下载Docker安装脚本..."
+info "使用本地Docker安装脚本: $LOCAL_SCRIPT_NAME"
 
-# 下载Docker安装脚本
-if curl -fsSL "$DOCKER_SCRIPT_URL" -o "$LOCAL_SCRIPT_NAME"; then
-    info "下载完成: $LOCAL_SCRIPT_NAME"
-else
-    error "下载失败，请检查网络连接或URL是否有效"
+# 检查本地脚本是否存在
+if [ ! -f "$LOCAL_SCRIPT_NAME" ]; then
+    error "本地脚本文件 $LOCAL_SCRIPT_NAME 不存在"
 fi
 
 # 设置可执行权限
@@ -52,7 +49,7 @@ if [ $? -eq 0 ]; then
     
     if [[ "$INSTALL_PORTAINER" =~ ^[Yy]$ ]]; then
         info "开始安装Portainer..."
-        docker run -d --restart=always --name portainer -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer
+        docker run -d --restart=always --name portainer -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock registry.cn-hangzhou.aliyuncs.com/xfg-studio/portainer:latest
         
         if [ $? -eq 0 ]; then
             info "Portainer安装成功！"
