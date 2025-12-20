@@ -107,31 +107,46 @@ apt-get install -y \
     apt-transport-https \
     software-properties-common || error "依赖包安装失败"
 
-# 添加Docker官方GPG密钥
-info "添加Docker官方GPG密钥..."
+# 添加Docker GPG密钥
+info "添加Docker GPG密钥..."
 install -m 0755 -d /etc/apt/keyrings
 
-# 尝试多个源下载GPG密钥
+# 尝试多个源下载GPG密钥（优先使用国内镜像源）
 GPG_SUCCESS=false
 
-# 尝试官方源
-info "尝试从Docker官方下载GPG密钥..."
-if curl -fsSL --connect-timeout 10 --max-time 30 https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg 2>/dev/null; then
+# 优先尝试阿里云镜像源（国内用户推荐）
+info "尝试从阿里云镜像下载GPG密钥..."
+if curl -fsSL --connect-timeout 10 --max-time 30 https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg 2>/dev/null; then
     GPG_SUCCESS=true
-    info "从Docker官方成功下载GPG密钥"
+    info "从阿里云镜像成功下载GPG密钥"
 else
-    warning "从Docker官方下载GPG密钥失败，尝试备用源..."
+    warning "从阿里云镜像下载GPG密钥失败，尝试清华源..."
     
-    # 尝试阿里云镜像源
-    info "尝试从阿里云镜像下载GPG密钥..."
-    if curl -fsSL --connect-timeout 10 --max-time 30 https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg 2>/dev/null; then
+    # 尝试清华源
+    info "尝试从清华源下载GPG密钥..."
+    if curl -fsSL --connect-timeout 10 --max-time 30 https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg 2>/dev/null; then
         GPG_SUCCESS=true
-        info "从阿里云镜像成功下载GPG密钥"
+        info "从清华源成功下载GPG密钥"
     else
-        warning "从阿里云镜像下载GPG密钥失败，尝试清华源..."
+        warning "从清华源下载GPG密钥失败，尝试中科大源..."
         
-        # 尝试清华源
-        info "尝试从清华源下载GPG密钥..."
+        # 尝试中科大源
+        info "尝试从中科大源下载GPG密钥..."
+        if curl -fsSL --connect-timeout 10 --max-time 30 https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg 2>/dev/null; then
+            GPG_SUCCESS=true
+            info "从中科大源成功下载GPG密钥"
+        else
+            warning "从国内镜像源下载GPG密钥都失败，尝试官方源..."
+            
+            # 最后尝试官方源
+            info "尝试从Docker官方下载GPG密钥..."
+            if curl -fsSL --connect-timeout 10 --max-time 30 https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg 2>/dev/null; then
+                GPG_SUCCESS=true
+                info "从Docker官方成功下载GPG密钥"
+            fi
+        fi
+    fi
+fi
         if curl -fsSL --connect-timeout 10 --max-time 30 https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg 2>/dev/null; then
             GPG_SUCCESS=true
             info "从清华源成功下载GPG密钥"
@@ -149,7 +164,7 @@ else
 fi
 
 if [ "$GPG_SUCCESS" = false ]; then
-    error "从所有源下载GPG密钥都失败。请检查网络连接，或手动下载GPG密钥：\n手动下载地址：https://download.docker.com/linux/ubuntu/gpg\n下载后执行：curl -fsSL 下载的文件路径 | gpg --dearmor -o /etc/apt/keyrings/docker.gpg"
+    error "从所有源下载GPG密钥都失败。\n\n建议解决方案：\n1. 检查网络连接和DNS设置\n2. 手动下载GPG密钥：\n   wget https://download.docker.com/linux/ubuntu/gpg -O docker.gpg\n   sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg docker.gpg\n3. 使用代理服务器后再运行脚本\n4. 稍后再试，可能是临时网络问题"
 fi
 
 chmod a+r /etc/apt/keyrings/docker.gpg
@@ -161,41 +176,46 @@ info "设置Docker仓库..."
 UBUNTU_CODENAME=$(. /etc/os-release && echo "$VERSION_CODENAME")
 ARCH=$(dpkg --print-architecture)
 
-# 尝试设置官方仓库
-info "尝试设置Docker官方仓库..."
-echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $UBUNTU_CODENAME stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+# 优先使用国内镜像源（国内用户推荐）
+info "优先使用国内镜像源设置Docker仓库..."
 
-# 更新apt包索引，如果失败则尝试镜像源
+# 首先尝试阿里云镜像源
+info "尝试阿里云镜像源..."
+echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $UBUNTU_CODENAME stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# 更新apt包索引
 info "更新apt包索引..."
-if ! apt-get update -y; then
-    warning "官方仓库更新失败，尝试使用镜像源..."
+if apt-get update -y; then
+    info "阿里云镜像源设置成功"
+else
+    warning "阿里云镜像源更新失败，尝试清华源..."
     
-    # 尝试阿里云镜像
-    info "尝试阿里云镜像源..."
-    echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.aliyun.com/docker-ce/linux/ubuntu $UBUNTU_CODENAME stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+    # 尝试清华源
+    info "尝试清华源..."
+    echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu $UBUNTU_CODENAME stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
     
     if apt-get update -y; then
-        info "阿里云镜像源设置成功"
+        info "清华源设置成功"
     else
-        warning "阿里云镜像源更新失败，尝试清华源..."
+        warning "清华源更新失败，尝试中科大源..."
         
-        # 尝试清华源
-        info "尝试清华源..."
-        echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu $UBUNTU_CODENAME stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+        # 尝试中科大源
+        info "尝试中科大源..."
+        echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu $UBUNTU_CODENAME stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
         
         if apt-get update -y; then
-            info "清华源设置成功"
+            info "中科大源设置成功"
         else
-            warning "清华源更新失败，尝试中科大源..."
+            warning "国内镜像源都无法连接，尝试官方源..."
             
-            # 尝试中科大源
-            info "尝试中科大源..."
-            echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu $UBUNTU_CODENAME stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+            # 最后尝试官方源
+            info "尝试Docker官方仓库..."
+            echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $UBUNTU_CODENAME stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
             
             if apt-get update -y; then
-                info "中科大源设置成功"
+                info "Docker官方仓库设置成功"
             else
-                error "所有镜像源都无法连接，请检查网络连接或手动设置Docker仓库"
+                error "所有仓库源都无法连接，请检查网络连接或手动设置Docker仓库"
             fi
         fi
     fi
@@ -236,7 +256,7 @@ else
 fi
 
 if [ "$DOCKER_INSTALL_SUCCESS" = false ]; then
-    error "Docker安装失败。您可以尝试：\n1. 检查网络连接\n2. 手动安装Docker：apt-get install -y docker-ce docker-ce-cli containerd.io\n3. 使用snap安装：snap install docker"
+    error "Docker安装失败。\n\n建议解决方案：\n1. 检查网络连接和DNS设置\n2. 手动安装指定版本：\n   apt-cache madison docker-ce  # 查看可用版本\n   apt-get install -y docker-ce=<版本号> docker-ce-cli=<版本号> containerd.io\n3. 使用snap安装：sudo snap install docker\n4. 检查系统日志：journalctl -xe\n5. 稍后再试，可能是临时网络问题"
 fi
 
 # 启动Docker服务
@@ -276,6 +296,9 @@ DOCKER_COMPOSE_VERSION=$(docker compose version)
 echo "Docker Compose版本: $DOCKER_COMPOSE_VERSION"
 
 info "Docker环境安装完成！"
+echo "=================================================="
+echo "Docker安装成功！"
+echo "=================================================="
 info "镜像加速已配置为："
 echo "  - https://docker.1ms.run"
 echo "  - https://docker.1panel.live"
@@ -283,4 +306,19 @@ echo "  - https://docker.ketches.cn"
 
 info "您的Docker已经安装完毕，版本为：$DOCKER_VERSION"
 
-info "提示，如果镜像不可用，可以进入链接，按照说明，重新设置镜像；https://status.1panel.top/status/docker"
+echo ""
+echo "🚀 Docker常用命令："
+echo "  docker --version          # 查看Docker版本"
+echo "  docker ps                 # 查看运行中的容器"
+echo "  docker images             # 查看本地镜像"
+echo "  docker pull hello-world   # 拉取测试镜像"
+echo "  docker run hello-world    # 运行测试容器"
+echo ""
+echo "📚 后续建议："
+echo "  1. 运行 'docker run hello-world' 测试Docker是否正常工作"
+echo "  2. 如需管理容器，可考虑安装Portainer"
+echo "  3. 定期更新Docker：apt-get update && apt-get upgrade docker-ce"
+echo ""
+echo "🔗 如果镜像加速不可用，可访问：https://status.1panel.top/status/docker"
+echo "   获取最新的镜像加速地址"
+echo "=================================================="
