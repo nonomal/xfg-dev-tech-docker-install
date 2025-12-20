@@ -147,21 +147,6 @@ else
         fi
     fi
 fi
-        if curl -fsSL --connect-timeout 10 --max-time 30 https://mirrors.tuna.tsinghua.edu.cn/docker-ce/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg 2>/dev/null; then
-            GPG_SUCCESS=true
-            info "从清华源成功下载GPG密钥"
-        else
-            warning "从清华源下载GPG密钥失败，尝试中科大源..."
-            
-            # 尝试中科大源
-            info "尝试从中科大源下载GPG密钥..."
-            if curl -fsSL --connect-timeout 10 --max-time 30 https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg 2>/dev/null; then
-                GPG_SUCCESS=true
-                info "从中科大源成功下载GPG密钥"
-            fi
-        fi
-    fi
-fi
 
 if [ "$GPG_SUCCESS" = false ]; then
     error "从所有源下载GPG密钥都失败。\n\n建议解决方案：\n1. 检查网络连接和DNS设置\n2. 手动下载GPG密钥：\n   wget https://download.docker.com/linux/ubuntu/gpg -O docker.gpg\n   sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg docker.gpg\n3. 使用代理服务器后再运行脚本\n4. 稍后再试，可能是临时网络问题"
