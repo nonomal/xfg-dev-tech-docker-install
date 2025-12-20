@@ -49,7 +49,7 @@ if [ $? -eq 0 ]; then
     
     if [[ "$INSTALL_PORTAINER" =~ ^[Yy]$ ]]; then
         info "开始安装Portainer..."
-        docker run -d --restart=always --name portainer -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock portainer/portainer
+        docker run -d --restart=always --name portainer -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock registry.cn-hangzhou.aliyuncs.com/xfg-studio/portainer:latest
         
         if [ $? -eq 0 ]; then
             info "Portainer安装成功！"
