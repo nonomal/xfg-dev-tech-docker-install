@@ -1,5 +1,10 @@
 # 支持 centos 7.6\7.9、Ubuntu 24 系统环境安装 
 
+```java
+推荐；git clone https://gitcode.com/Yao__Shun__Yu/xfg-dev-tech-docker-install.git
+备用；git clone https://github.com/fuzhengwei/xfg-dev-tech-docker-install.git
+```
+
 ## centos 7.6\7.9
 
 ```java
