@@ -376,6 +376,27 @@ EOF
     fi
 }
 
+# Ubuntu/Debian apt 安装函数
+install_maven_apt() {
+    [[ $SILENT_MODE == false ]] && log_info "检测到 Ubuntu/Debian 系统，使用 apt 安装 Maven..."
+
+    apt-get update -y
+    apt-get install -y maven
+
+    # 确定安装路径
+    if [[ -d "/usr/share/maven" ]]; then
+        INSTALL_DIR="/usr/share/maven"
+    elif command -v mvn >/dev/null 2>&1; then
+        local mvn_path=$(readlink -f $(which mvn))
+        INSTALL_DIR=$(dirname $(dirname "$mvn_path"))
+    else
+        log_error "无法确定 Maven 安装路径"
+        exit 1
+    fi
+    
+    log_success "Maven 安装完成，安装路径: $INSTALL_DIR"
+}
+
 # 主函数
 main() {
     [[ $SILENT_MODE == false ]] && log_info "开始Maven安装程序..."
@@ -386,8 +407,14 @@ main() {
     check_existing_maven
     install_dependencies
     
-    local package_path=$(validate_package)
-    install_maven "$package_path"
+    # 根据系统类型选择安装方式
+    if [[ "$OS" == *"Ubuntu"* || "$OS" == *"Debian"* ]]; then
+        install_maven_apt
+    else
+        local package_path=$(validate_package)
+        install_maven "$package_path"
+    fi
+
     configure_environment
     verify_installation
     show_installation_info
@@ -408,6 +435,13 @@ main() {
         echo
         log_info "请在新终端中执行 'mvn -version' 验证安装"
         log_info "如果命令不生效，请执行: source /etc/profile"
+        echo
+        log_info "=============================================="
+        log_info "温馨提示: 如果国内下载依赖速度较慢"
+        log_info "建议将 settings.xml 替换为阿里云镜像配置"
+        log_info "配置文件: $INSTALL_DIR/conf/settings.xml"
+        log_info "参考地址: https://developer.aliyun.com/mirror/maven"
+        log_info "=============================================="
     fi
 }
 
