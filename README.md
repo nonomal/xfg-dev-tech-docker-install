@@ -103,6 +103,13 @@ find . -name "*.sh" -type f -exec chmod +x {} \;
 
 #### 2.1 安装 JDK
 
+> **Ubuntu 用户特别说明：**
+> 对于 Ubuntu 24 用户，也可以直接使用 apt 命令安装：
+> ```bash
+> sudo apt update
+> sudo apt install openjdk-8-jdk
+> ```
+
 脚本位置： environment/jdk/install-java.sh
 
 功能： 支持安装 JDK 8 和 JDK 17
@@ -208,19 +215,40 @@ sudo ./environment/jdk/remove-maven -f -q
 
 ### 3. Docker 安装脚本
 
-脚本位置： run_install_docker_local.sh
+#### 3.1 CentOS 安装 Docker (支持 7.6/7.9)
 
-功能： 使用本地的 install_docker.sh 脚本安装 Docker
+脚本位置： `centos_run_install_docker_local.sh`
+
+功能： 使用本地的 `docker/centos_install_docker.sh` 脚本安装 Docker
 
 执行方式：
 
-```
-# 执行 Docker 安装
-./run_install_docker_local.sh
-```
-注意事项：
+```bash
+# 添加权限
+chmod +x centos_run_install_docker_local.sh
 
-- 脚本会自动检查 install_docker.sh 文件是否存在
+# 执行 Docker 安装
+./centos_run_install_docker_local.sh
+```
+
+#### 3.2 Ubuntu 安装 Docker (支持 24.04)
+
+脚本位置： `ubuntu_run_install_docker_local.sh`
+
+功能： 使用本地的 `docker/ubuntu_install_docker.sh` 脚本安装 Docker
+
+执行方式：
+
+```bash
+# 添加权限
+chmod +x ubuntu_run_install_docker_local.sh
+
+# 执行 Docker 安装
+./ubuntu_run_install_docker_local.sh
+```
+
+注意事项：
+- 脚本会自动检查本地安装脚本是否存在
 - 如果需要 root 权限会自动请求
 - 安装完成后会询问是否安装 Portainer 容器管理界面
 - Portainer 访问地址： http://服务器IP:9000
@@ -307,14 +335,18 @@ sudo systemctl start docker
    
 2. 然后安装 Docker ：
 
-   ```
-   ./run_install_docker_local.sh
+   ```bash
+   # CentOS
+   ./centos_run_install_docker_local.sh
+   
+   # Ubuntu
+   ./ubuntu_run_install_docker_local.sh
    ```
 
-3. 然后安装 Docker ：
+3. 然后安装 Maven ：
 
-   ```
-   ./install-maven.sh
+   ```bash
+   sudo ./environment/maven/install-maven.sh
    ```
    
 4. 最后安装开发软件 ：
@@ -324,4 +356,6 @@ sudo systemctl start docker
    ```
    按照以上步骤，您就可以成功执行所有脚本并搭建完整的开发环境。
 
+---
 
+关于如何使用 Docker 部署项目教程；[https://origin.bugstack.cn/md/road-map/docker-deploy-project.html](https://origin.bugstack.cn/md/road-map/docker-deploy-project.html)
