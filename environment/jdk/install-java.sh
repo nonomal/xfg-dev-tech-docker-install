@@ -481,6 +481,57 @@ cleanup() {
     fi
 }
 
+# Ubuntu/Debian apt 安装函数
+install_jdk_apt() {
+    [[ $SILENT_MODE == false ]] && log_info "检测到 Ubuntu/Debian 系统，使用 apt 安装 JDK..."
+
+    # 更新软件源
+    apt-get update -y
+
+    local package_name=""
+    if [[ "$JDK_VERSION" == "8" ]]; then
+        package_name="openjdk-8-jdk"
+    elif [[ "$JDK_VERSION" == "17" ]]; then
+        package_name="openjdk-17-jdk"
+    fi
+
+    [[ $SILENT_MODE == false ]] && log_info "正在安装 $package_name..."
+    apt-get install -y "$package_name"
+
+    # 获取架构信息
+    local arch="amd64"
+    if command -v dpkg >/dev/null 2>&1; then
+        arch=$(dpkg --print-architecture)
+    fi
+    
+    # 确定安装路径
+    if [[ "$JDK_VERSION" == "8" ]]; then
+        INSTALL_DIR="/usr/lib/jvm/java-8-openjdk-${arch}"
+    elif [[ "$JDK_VERSION" == "17" ]]; then
+        INSTALL_DIR="/usr/lib/jvm/java-17-openjdk-${arch}"
+    fi
+    
+    # 验证路径是否存在，如果不存在则尝试自动查找
+    if [[ ! -d "$INSTALL_DIR" ]]; then
+        if command -v java >/dev/null 2>&1; then
+            local java_path=$(readlink -f $(which java))
+            if [[ -n "$java_path" ]]; then
+                INSTALL_DIR=$(dirname $(dirname "$java_path"))
+                if [[ "$(basename "$INSTALL_DIR")" == "jre" ]]; then
+                    INSTALL_DIR=$(dirname "$INSTALL_DIR")
+                fi
+            fi
+        fi
+    fi
+
+    if [[ ! -d "$INSTALL_DIR" ]]; then
+        log_error "无法确定 JDK 安装路径"
+        exit 1
+    fi
+    
+    log_success "JDK 安装完成，安装路径: $INSTALL_DIR"
+}
+
 # 主函数
 main() {
     [[ $SILENT_MODE == false ]] && log_info "开始JDK安装程序..."
@@ -492,13 +543,18 @@ main() {
     check_existing_java
     install_dependencies
     
-    # 如果没有指定自定义包路径，则提示手动下载
-    if [[ -z "$CUSTOM_PACKAGE_PATH" ]]; then
-        prompt_manual_download
+    # 根据系统类型选择安装方式
+    if [[ "$OS" == *"Ubuntu"* || "$OS" == *"Debian"* ]]; then
+        install_jdk_apt
+    else
+        # 如果没有指定自定义包路径，则提示手动下载
+        if [[ -z "$CUSTOM_PACKAGE_PATH" ]]; then
+            prompt_manual_download
+        fi
+        
+        local package_path=$(validate_package)
+        install_jdk "$package_path"
     fi
-    
-    local package_path=$(validate_package)
-    install_jdk "$package_path"
     configure_environment
     verify_installation
     show_installation_info
