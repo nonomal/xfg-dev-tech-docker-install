@@ -21,7 +21,7 @@ error() {
 }
 
 # 定义本地脚本文件名
-LOCAL_SCRIPT_NAME="ubuntu_install_docker.sh"
+LOCAL_SCRIPT_NAME="docker/ubuntu_install_docker.sh"
 
 info "使用本地Docker安装脚本: $LOCAL_SCRIPT_NAME"
 

@@ -21,7 +21,7 @@ error() {
 }
 
 # 定义本地脚本文件名
-LOCAL_SCRIPT_NAME="centos_install_docker.sh"
+LOCAL_SCRIPT_NAME="docker/centos_install_docker.sh"
 
 info "使用本地Docker安装脚本: $LOCAL_SCRIPT_NAME"
 
