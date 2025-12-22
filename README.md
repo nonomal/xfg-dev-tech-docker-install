@@ -79,282 +79,53 @@
 
 本文档介绍如何执行项目中的各个脚本，包括权限设置和执行步骤。操作视频：[https://www.bilibili.com/video/BV1oaNazEEf5](https://www.bilibili.com/video/BV1oaNazEEf5)
 
-### 1. 脚本权限设置
+### 1. 下载安装脚本（github\gitcode）
 
-在执行任何脚本之前，需要先为脚本文件添加可执行权限：
-
+```java
+$ git clone https://github.com/fuzhengwei/xfg-dev-tech-docker-install.git
+$ git clone https://gitcode.com/Yao__Shun__Yu/xfg-dev-tech-docker-install.git
+$ find . -name "*.sh" -type f -exec chmod +x {} \;
 ```
-# 为所有脚本添加可执行权限
-chmod +x environment/jdk/install-java.sh
-chmod +x environment/jdk/remove-java.sh
-chmod +x run_install_docker_local.sh
-chmod +x run_install_software.sh
-chmod +x install-maven.sh
-chmod +x remove-maven.sh
+### 2. 为所有脚本添加可执行权限
 
-```
-或者一次性为所有脚本添加权限：
-
-```
-find . -name "*.sh" -type f -exec chmod +x {} \;
+```java
+$ find . -name "*.sh" -type f -exec chmod +x {} \;
 ```
 
-### 2. JDK 安装脚本
+### 3. 安装 Docker (选择对应系统)
 
-#### 2.1 安装 JDK
-
-> **Ubuntu 用户特别说明：**
-> 对于 Ubuntu 24 用户，也可以直接使用 apt 命令安装：
-> ```bash
-> sudo apt update
-> sudo apt install openjdk-8-jdk
-> ```
-
-脚本位置： environment/jdk/install-java.sh
-
-功能： 支持安装 JDK 8 和 JDK 17
-
-执行方式：
-
-```
-# 交互式安装（推荐）
-sudo ./environment/jdk/install-java.sh
-
-# 指定版本安装
-sudo ./environment/jdk/install-java.sh -v 8    # 安装 JDK 8
-sudo ./environment/jdk/install-java.sh -v 17   # 安装 JDK 17
-
-# 强制安装（覆盖已有安装）
-sudo ./environment/jdk/install-java.sh -f -v 8
-
-# 静默安装
-sudo ./environment/jdk/install-java.sh -q -v 8
-
-# 自定义安装目录
-sudo ./environment/jdk/install-java.sh -d /opt/java -v 8
-```
-注意事项：
-
-- 需要 root 权限执行
-- 脚本会提示手动下载 JDK 包到 /dev-ops/java 目录
-- 支持的版本：JDK 8 (1.8.0_202) 和 JDK 17 (17.0.14)
-- 安装完成后环境变量会自动配置
-
-#### 2.2 卸载 JDK
-
-脚本位置： environment/jdk/remove-java.sh
-
-功能： 彻底清理 JDK 安装和环境配置
-
-执行方式：
-
-```
-# 交互式删除（推荐）
-sudo ./environment/jdk/remove-java.sh
-
-# 强制删除
-sudo ./environment/jdk/remove-java.sh -f
-
-# 静默删除
-sudo ./environment/jdk/remove-java.sh -f -q
-
-# 指定安装目录删除
-sudo ./environment/jdk/remove-java.sh -d /opt/java
-
-# 删除时不备份配置文件
-sudo ./environment/jdk/remove-java.sh --no-backup
-```
-注意事项：
-
-- 需要 root 权限执行
-- 会自动备份配置文件（除非使用 --no-backup）
-- 清理系统和用户级环境变量配置
-
-#### 2.3 Maven 安装脚本
-
-##### 2.3.1 安装 Maven
-
-脚本位置：`environment/maven/install-maven.sh`
-
-功能：自动安装 Apache Maven 3.8.8
-
-执行方式：
-
-```bash
-# 交互式安装（推荐）
-sudo ./environment/maven/install-maven.sh
-
-# 自定义安装目录
-sudo ./environment/maven/install-maven.sh -d /opt/maven
-
-# 使用本地Maven包
-sudo ./environment/maven/install-maven.sh -p /path/to/apache-maven-3.8.8.zip
-
-# 强制安装（覆盖已有安装）
-sudo ./environment/maven/install-maven.sh -f
-
-# 静默安装
-sudo ./environment/maven/install-maven.sh -q
-
-# 强制静默安装
-sudo ./environment/maven/install-maven.sh -f -q
+```java
+$ ./centos_run_install_docker_local.sh # CentOS
+$ ./ubuntu_run_install_docker_local.sh # Ubuntu
+$ find . -name "*.sh" -type f -exec chmod +x {} \;
 ```
 
-##### 2.3.2 卸载 Maven
+### 4. 安装开发软件 (MySQL, Redis, Nacos 等)
 
-```bash
-# 交互式删除（推荐）
-sudo ./environment/jdk/remove-maven.sh
-
-# 强制删除
-sudo ./environment/jdk/remove-maven.sh -f
-
-# 静默删除
-sudo ./environment/jdk/remove-maven -f -q
+```java
+$ sudo ./run_install_software.sh
+$ find . -name "*.sh" -type f -exec chmod +x {} \;
 ```
 
-### 3. Docker 安装脚本
+### 5. 安装 JDK (可选，支持 8/17) - 查看帮助文档，Ubuntu 使用 apt 命令安装
 
-#### 3.1 CentOS 安装 Docker (支持 7.6/7.9)
-
-脚本位置： `centos_run_install_docker_local.sh`
-
-功能： 使用本地的 `docker/centos_install_docker.sh` 脚本安装 Docker
-
-执行方式：
-
-```bash
-# 添加权限
-chmod +x centos_run_install_docker_local.sh
-
-# 执行 Docker 安装
-./centos_run_install_docker_local.sh
+```java
+$ sudo ./environment/jdk/install-java.sh -v 8
+$ find . -name "*.sh" -type f -exec chmod +x {} \;
 ```
 
-#### 3.2 Ubuntu 安装 Docker (支持 24.04)
+### 6. 安装 Maven - 查看帮助文档，Ubuntu 使用 apt 命令安装
 
-脚本位置： `ubuntu_run_install_docker_local.sh`
-
-功能： 使用本地的 `docker/ubuntu_install_docker.sh` 脚本安装 Docker
-
-执行方式：
-
-```bash
-# 添加权限
-chmod +x ubuntu_run_install_docker_local.sh
-
-# 执行 Docker 安装
-./ubuntu_run_install_docker_local.sh
+```java
+$ sudo ./environment/maven/install-maven.sh
+$ find . -name "*.sh" -type f -exec chmod +x {} \;
 ```
 
-注意事项：
-- 脚本会自动检查本地安装脚本是否存在
-- 如果需要 root 权限会自动请求
-- 安装完成后会询问是否安装 Portainer 容器管理界面
-- Portainer 访问地址： http://服务器IP:9000
+### 7. 安装 Terminal AI 工具
 
-### 4. 软件安装脚本
-
-脚本位置： run_install_software.sh
-
-功能： 使用 Docker Compose 安装各种开发软件
-
-执行方式：
-
+```java
+./terminal.sh
 ```
-# 执行软件安装
-sudo ./run_install_software.sh
-```
-
-支持的软件：
-
-- nacos - 服务注册与发现
-- mysql - 数据库
-- phpmyadmin - MySQL 管理界面
-- redis - 缓存数据库
-- redis-admin - Redis 管理界面
-- rabbitmq - 消息队列
-- elasticsearch - 搜索引擎
-- logstash - 日志处理
-- kibana - 日志分析界面
-- xxl-job-admin - 任务调度
-- prometheus - 监控系统
-- grafana - 监控面板
-- ollama - AI 模型服务
-- pgvector - 向量数据库
-- pgvector-admin - 向量数据库管理界面
-  注意事项：
-
-- 需要 root 权限执行
-- 需要先安装 Docker 和 docker-compose
-- 脚本会检查磁盘空间并显示预计占用
-- 支持选择原始配置或阿里云镜像配置
-- 可以多选软件进行批量安装
-
-### 5. 常见问题
-
-#### 5.1 权限问题
-
-如果遇到权限拒绝错误：
-
-```
-# 确保脚本有执行权限
-ls -la *.sh
-# 如果没有 x 权限，重新添加
-chmod +x script_name.sh
-```
-
-#### 5.2 环境变量生效
-
-JDK 安装后，环境变量在当前会话中已生效，新开终端需要：
-
-```
-# 重新加载配置
-source /etc/profile
-# 或者重新登录
-```
-
-#### 5.3 Docker 相关
-
-确保 Docker 服务正在运行：
-
-```
-# 检查 Docker 状态
-sudo systemctl status docker
-# 启动 Docker 服务
-sudo systemctl start docker
-```
-
-### 6. 执行顺序建议
-
-1. 首先安装 JDK （如果需要）：
-
-   ```
-   sudo ./environment/jdk/install-java.sh -v 8
-   ```
-   
-2. 然后安装 Docker ：
-
-   ```bash
-   # CentOS
-   ./centos_run_install_docker_local.sh
-   
-   # Ubuntu
-   ./ubuntu_run_install_docker_local.sh
-   ```
-
-3. 然后安装 Maven ：
-
-   ```bash
-   sudo ./environment/maven/install-maven.sh
-   ```
-   
-4. 最后安装开发软件 ：
-
-   ```
-   sudo ./run_install_software.sh
-   ```
-   按照以上步骤，您就可以成功执行所有脚本并搭建完整的开发环境。
 
 ---
 
