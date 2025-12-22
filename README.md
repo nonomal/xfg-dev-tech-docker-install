@@ -358,4 +358,4 @@ sudo systemctl start docker
 
 ---
 
-关于如何使用 Docker 部署项目教程；[https://origin.bugstack.cn/md/road-map/docker-deploy-project.html](https://origin.bugstack.cn/md/road-map/docker-deploy-project.html)
+关于如何使用 Docker 部署项目教程；[https://bugstack.cn/md/road-map/docker-deploy-project.html](https://bugstack.cn/md/road-map/docker-deploy-project.html)
