@@ -1,0 +1,32 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "provider": {
+        "my-model-openai": {
+            "npm": "@ai-sdk/openai-compatible",
+            "name": "OpenAPI",
+            "options": {
+                "apiKey": "你的apikey",
+                "baseURL": "https://你的baseURL/v1"
+            },
+            "models": {
+                "gpt-4.1": {
+                    "name": "gpt-4.1"
+                }
+            }
+        },
+        "my-model-glm": {
+            "npm": "@ai-sdk/openai-compatible",
+            "name": "GLMAPI",
+            "options": {
+                "apiKey": "你的apikey",
+                "baseURL": "https://open.bigmodel.cn/api/paas/v4"
+            },
+            "models": {
+                "glm-4.7": {
+                    "name": "glm-4.7"
+                }
+            }
+        }
+    },
+    "model": "my-model-openai/gpt-4.1"
+}
