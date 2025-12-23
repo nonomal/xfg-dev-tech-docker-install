@@ -142,7 +142,7 @@ if [ "$choice" == "1" ]; then
     echo "4. 配置自定义全局模型（方便配置代理地址）:"
     echo "   cd terminal"
     echo "   ./opencode.sh"
-    echo "   然后编辑: vim /root/.config/opencode/opencode.json"
+    echo "   然后编辑（输入 i 之后编辑，编辑后输入 esc，之后输入 :wq 退出）: vim /root/.config/opencode/opencode.json"
     echo ""
     echo "详细文档: https://opencode.ai/download"
     echo ""
