@@ -104,7 +104,7 @@ mkdir -p "$INSTALL_DIR"
 
 specific_version="1.0.190"
 
-url="https://gitcode.com/Yao__Shun__Yu/xfg-dev-tech-docker-install/releases/download/opencode/v${specific_version}/$filename"
+url="https://gitcode.com/Yao__Shun__Yu/xfg-dev-tech-docker-install/releases/download/opencode%2Fv${specific_version}/$filename"
 
 print_message() {
     local level=$1
