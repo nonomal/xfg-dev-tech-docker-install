@@ -82,27 +82,35 @@ fi
 
 if [ -n "$SHELL_CONFIG" ] && [ -f "$SHELL_CONFIG" ]; then
     echo "Detected shell configuration file: $SHELL_CONFIG"
-    echo "Refreshing system configuration..."
     
-    # Source the config file to update current session context (best effort)
-    # Note: This only affects the current script execution, not the parent shell.
-    # We trap errors in case source fails
+    # Check if we are in a subshell or sourced
+    # If the script is run as ./terminal.sh, source won't affect parent shell.
+    # We can try to exec a new shell to reload env, but that might be invasive.
+    # Instead, we will provide a very clear instruction.
+    
+    echo "Refreshing system configuration in current script context..."
     if source "$SHELL_CONFIG"; then
-        echo "✅ Configuration refreshed successfully."
-    else
-        echo "⚠️  Warning: Failed to auto-refresh configuration."
+         echo "✅ Configuration refreshed (for this script execution)."
     fi
 else
     echo "⚠️  Could not automatically detect shell configuration file."
 fi
 
 echo ""
-echo "IMPORTANT: To ensure the installation takes effect in your current terminal, please run:"
+echo "============================================="
+echo "   ⚠️  IMPORTANT: ACTION REQUIRED ⚠️"
+echo "============================================="
+echo "To make the installed command available in your current terminal,"
+echo "you MUST execute the following command manually:"
+echo ""
 if [ -n "$SHELL_CONFIG" ]; then
-    echo "  source $SHELL_CONFIG"
+    echo "    source $SHELL_CONFIG"
 else
-    echo "  source ~/.bashrc  # (or your shell's config file)"
+    echo "    source ~/.bashrc  # (or your shell's config file)"
 fi
+echo ""
+echo "Alternatively, you can restart your terminal session."
+echo "============================================="
 
 echo ""
 echo "============================================="

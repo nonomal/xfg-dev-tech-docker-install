@@ -95,25 +95,15 @@ if [ "$os" = "linux" ]; then
 else
     if ! command -v unzip >/dev/null 2>&1; then
         echo -e "${RED}Error: 'unzip' is required but not installed.${NC}"
-        exit 1
+        exit 1open
     fi
 fi
 
 INSTALL_DIR=$HOME/.opencode/bin
 mkdir -p "$INSTALL_DIR"
 
-if [ -z "$requested_version" ]; then
-    url="https://gitee.com/fustack/opencodeopencode/releases/latest/download/$filename"
-    specific_version=$(curl -s https://api.github.com/repos/sst/opencode/releases/latest | sed -n 's/.*"tag_name": *"v\([^"]*\)".*/\1/p')
-
-    if [[ $? -ne 0 || -z "$specific_version" ]]; then
-        echo -e "${RED}Failed to fetch version information${NC}"
-        exit 1
-    fi
-else
-    url="https://gitee.com/fustack/opencodeopencode/releases/download/v${requested_version}/$filename"
-    specific_version=$requested_version
-fi
+specific_version="1.0.186"
+url="https://gitee.com/fustack/opencodeopencode/releases/download/v${specific_version}/$filename"
 
 print_message() {
     local level=$1
