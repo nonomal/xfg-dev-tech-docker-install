@@ -10,8 +10,8 @@ echo "============================================="
 echo "   Terminal AI Assistant Installer"
 echo "============================================="
 echo "Please select the tool you want to install:"
-echo "1) Claude Code (Anthropic)"
-echo "2) Open Code (SST)"
+echo "1) Open Code (SST) [推荐优先使用]"
+echo "2) Claude Code (Anthropic)"
 echo "============================================="
 
 read -p "Enter your choice [1-2]: " choice
@@ -19,17 +19,17 @@ read -p "Enter your choice [1-2]: " choice
 case $choice in
     1)
         echo ""
-        echo "Starting installation of Claude Code..."
-        echo "Official Website: https://claude.com/product/claude-code"
-        echo "---------------------------------------------"
-        INSTALL_SCRIPT="$SCRIPT_DIR/terminal/claude-code-install.sh"
-        ;;
-    2)
-        echo ""
         echo "Starting installation of Open Code..."
         echo "Official Website: https://opencode.ai/download"
         echo "---------------------------------------------"
         INSTALL_SCRIPT="$SCRIPT_DIR/terminal/open-code-install.sh"
+        ;;
+    2)
+        echo ""
+        echo "Starting installation of Claude Code..."
+        echo "Official Website: https://claude.com/product/claude-code"
+        echo "---------------------------------------------"
+        INSTALL_SCRIPT="$SCRIPT_DIR/terminal/claude-code-install.sh"
         ;;
     *)
         echo "Invalid choice. Exiting."
@@ -116,11 +116,37 @@ echo ""
 echo "============================================="
 echo "   Next Steps"
 echo "============================================="
+
 if [ "$choice" == "1" ]; then
+    echo "Open Code 安装完成！"
+    echo ""
+    echo "使用步骤:"
+    echo "1. 进入你的项目文件夹:"
+    echo "   cd /path/to/your/project"
+    echo ""
+    echo "2. 启动 Open Code:"
+    echo "   opencode"
+    echo ""
+    echo "3. 在 Open Code 中:"
+    echo "   - 输入 /models 选择模型"
+    echo "     • 免费模型可用"
+    echo "     • 智谱AI (GLM)"
+    echo "     • 小米AI 等"
+    echo "   - 常用命令:"
+    echo "     • /help - 查看帮助"
+    echo "     • /models - 选择模型"
+    echo "     • /clear - 清空对话"
+    echo "     • /exit - 退出"
+    echo ""
+    echo "4. 配置自定义全局模型:"
+    echo "   cd terminal"
+    echo "   ./opencode.sh"
+    echo "   然后编辑: vim /root/.config/opencode/opencode.json"
+    echo ""
+    echo "详细文档: https://opencode.ai/download"
+    echo ""
+elif [ "$choice" == "2" ]; then
     echo "Please visit the official documentation to learn how to use Claude Code:"
     echo "👉 https://claude.com/product/claude-code"
-elif [ "$choice" == "2" ]; then
-    echo "Please visit the official documentation to learn how to use Open Code:"
-    echo "👉 https://opencode.ai/download"
 fi
 echo "============================================="
