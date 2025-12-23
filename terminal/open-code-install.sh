@@ -103,7 +103,7 @@ INSTALL_DIR=$HOME/.opencode/bin
 mkdir -p "$INSTALL_DIR"
 
 if [ -z "$requested_version" ]; then
-    url="https://github.com/sst/opencode/releases/latest/download/$filename"
+    url="https://gitee.com/fustack/opencodeopencode/releases/latest/download/$filename"
     specific_version=$(curl -s https://api.github.com/repos/sst/opencode/releases/latest | sed -n 's/.*"tag_name": *"v\([^"]*\)".*/\1/p')
 
     if [[ $? -ne 0 || -z "$specific_version" ]]; then
@@ -111,7 +111,7 @@ if [ -z "$requested_version" ]; then
         exit 1
     fi
 else
-    url="https://github.com/sst/opencode/releases/download/v${requested_version}/$filename"
+    url="https://gitee.com/fustack/opencodeopencode/releases/download/v${requested_version}/$filename"
     specific_version=$requested_version
 fi
 
