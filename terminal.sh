@@ -121,7 +121,7 @@ if [ "$choice" == "1" ]; then
     echo "Open Code 安装完成！"
     echo ""
     echo "使用步骤:"
-    echo "1. 进入你的项目文件夹(任何一个都可以，也可以 mkdir 新建文件件，进入后它负责管理这个文件夹下的内容):"
+    echo "1. 进入你的项目文件夹(任何一个都可以，也可以 mkdir 新建文件夹，进入后它负责管理这个文件夹下的内容):"
     echo "   cd /dev-ops"
     echo ""
     echo "2. 启动 Open Code:"
