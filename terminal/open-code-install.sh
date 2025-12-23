@@ -234,15 +234,44 @@ download_and_install() {
     local tmp_dir="${TMPDIR:-/tmp}/opencode_install_$$"
     mkdir -p "$tmp_dir"
     
+    print_message info "${MUTED}Downloading from: ${NC}$url"
+    
     if [[ "$os" == "windows" ]] || ! [ -t 2 ] || ! download_with_progress "$url" "$tmp_dir/$filename"; then
         # Fallback to standard curl on Windows, non-TTY environments, or if custom progress fails
         curl -# -L -o "$tmp_dir/$filename" "$url"
     fi
 
+    if [ ! -f "$tmp_dir/$filename" ]; then
+        print_message error "Download failed: file not found"
+        rm -rf "$tmp_dir"
+        exit 1
+    fi
+
+    if [ ! -s "$tmp_dir/$filename" ]; then
+        print_message error "Download failed: file is empty"
+        rm -rf "$tmp_dir"
+        exit 1
+    fi
+
+    print_message info "${MUTED}Downloaded file size: ${NC}$(du -h "$tmp_dir/$filename" | cut -f1)"
+
     if [ "$os" = "linux" ]; then
+        if ! file "$tmp_dir/$filename" | grep -q "gzip"; then
+            print_message error "Downloaded file is not in gzip format"
+            print_message info "File info: $(file "$tmp_dir/$filename")"
+            rm -rf "$tmp_dir"
+            exit 1
+        fi
         tar -xzf "$tmp_dir/$filename" -C "$tmp_dir"
     else
         unzip -q "$tmp_dir/$filename" -d "$tmp_dir"
+    fi
+    
+    if [ ! -f "$tmp_dir/opencode" ]; then
+        print_message error "Extracted opencode binary not found"
+        print_message info "Contents: $(ls -la "$tmp_dir")"
+        rm -rf "$tmp_dir"
+        exit 1
     fi
     
     mv "$tmp_dir/opencode" "$INSTALL_DIR"
