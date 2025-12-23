@@ -249,8 +249,47 @@ download_and_install() {
     rm -rf "$tmp_dir"
 }
 
+install_ripgrep() {
+    # Check for local ripgrep tarball in the script directory
+    local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+    local rg_tarball=$(find "$script_dir" -maxdepth 1 -name "ripgrep-*-x86_64-unknown-linux-musl.tar.gz" | head -n 1)
+
+    if [ -n "$rg_tarball" ] && [ -f "$rg_tarball" ]; then
+        print_message info "${MUTED}Found local ripgrep package: ${NC}$(basename "$rg_tarball")"
+        print_message info "${MUTED}Installing ripgrep to ${NC}$INSTALL_DIR"
+        
+        local tmp_rg_dir="${TMPDIR:-/tmp}/opencode_rg_install_$$"
+        mkdir -p "$tmp_rg_dir"
+        
+        tar -xzf "$rg_tarball" -C "$tmp_rg_dir"
+        
+        # Find the rg binary in the extracted folder (it's usually in a subdir)
+        local rg_bin=$(find "$tmp_rg_dir" -name "rg" -type f | head -n 1)
+        
+        if [ -n "$rg_bin" ]; then
+            mv "$rg_bin" "$INSTALL_DIR/"
+            chmod 755 "$INSTALL_DIR/rg"
+            print_message info "${MUTED}Successfully installed ${NC}ripgrep (rg)${MUTED} from local file."
+        else
+            print_message error "Could not find 'rg' binary in the archive."
+        fi
+        
+        rm -rf "$tmp_rg_dir"
+    else
+        # If not found locally, check if it's already installed
+        if ! command -v rg >/dev/null 2>&1; then
+             print_message warning "ripgrep (rg) not found. OpenCode requires it and may try to download it at runtime."
+             print_message info "To avoid runtime download errors, you can:"
+             print_message info "1. Download: https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz"
+             print_message info "2. Place it in: $script_dir/"
+             print_message info "3. Re-run this installation script."
+        fi
+    fi
+}
+
 check_version
 download_and_install
+install_ripgrep
 
 
 add_to_path() {
