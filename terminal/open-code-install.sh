@@ -102,8 +102,9 @@ fi
 INSTALL_DIR=$HOME/.opencode/bin
 mkdir -p "$INSTALL_DIR"
 
-specific_version="1.0.186"
-url="https://gitee.com/fustack/opencodeopencode/releases/download/v${specific_version}/$filename"
+specific_version="1.0.190"
+
+url="https://gitcode.com/Yao__Shun__Yu/xfg-dev-tech-docker-install/releases/download/opencode/v${specific_version}/$filename"
 
 print_message() {
     local level=$1
