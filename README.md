@@ -82,7 +82,6 @@
 ```java
 $ git clone https://github.com/fuzhengwei/xfg-dev-tech-docker-install.git
 $ git clone https://gitcode.com/Yao__Shun__Yu/xfg-dev-tech-docker-install.git
-$ find . -name "*.sh" -type f -exec chmod +x {} \;
 ```
 ### 2. 为所有脚本添加可执行权限
 
@@ -95,28 +94,24 @@ $ find . -name "*.sh" -type f -exec chmod +x {} \;
 ```java
 $ ./centos_run_install_docker_local.sh # CentOS
 $ ./ubuntu_run_install_docker_local.sh # Ubuntu
-$ find . -name "*.sh" -type f -exec chmod +x {} \;
 ```
 
 ### 4. 安装开发软件 (MySQL, Redis, Nacos 等)
 
 ```java
 $ sudo ./run_install_software.sh
-$ find . -name "*.sh" -type f -exec chmod +x {} \;
 ```
 
 ### 5. 安装 JDK (可选，支持 8/17) - 查看帮助文档，Ubuntu 使用 apt 命令安装
 
 ```java
 $ sudo ./environment/jdk/install-java.sh -v 8
-$ find . -name "*.sh" -type f -exec chmod +x {} \;
 ```
 
 ### 6. 安装 Maven - 查看帮助文档，Ubuntu 使用 apt 命令安装
 
 ```java
 $ sudo ./environment/maven/install-maven.sh
-$ find . -name "*.sh" -type f -exec chmod +x {} \;
 ```
 
 ### 7. 安装 Terminal AI 工具
