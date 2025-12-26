@@ -282,7 +282,50 @@ download_and_install() {
 install_ripgrep() {
     # Check for local ripgrep tarball in the script directory
     local script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-    local rg_tarball=$(find "$script_dir" -maxdepth 1 -name "ripgrep-*-x86_64-unknown-linux-musl.tar.gz" | head -n 1)
+    local rg_filename=""
+    local download_url=""
+    local base_url="https://gitcode.com/Yao__Shun__Yu/xfg-dev-tech-docker-install/releases/download/ripgrep%2F14.1.1"
+
+    # Determine the correct ripgrep package based on OS and Architecture
+    if [ "$os" = "darwin" ]; then
+        if [ "$arch" = "arm64" ]; then
+            # macOS ARM64 (Apple Silicon)
+            rg_filename="ripgrep-14.1.1-aarch64-apple-darwin.tar.gz"
+        else
+            # macOS x64 (Intel)
+            rg_filename="ripgrep-14.1.1-x86_64-apple-darwin.tar.gz"
+        fi
+    elif [ "$os" = "linux" ]; then
+        if [ "$arch" = "arm64" ]; then
+             # Linux ARM64
+             rg_filename="ripgrep-14.1.1-aarch64-unknown-linux-musl.tar.gz"
+        else
+             # Linux x64
+             rg_filename="ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz"
+        fi
+    else
+        # Fallback or other OS (Windows usually handled by zip)
+        rg_filename="ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz"
+    fi
+
+    download_url="${base_url}/${rg_filename}"
+
+    # Check for local file first
+    rg_tarball=$(find "$script_dir" -maxdepth 1 -name "$rg_filename" | head -n 1)
+
+    # If local file not found, try to download it
+    if [ -z "$rg_tarball" ]; then
+        print_message info "${MUTED}Local ripgrep package not found. Downloading from GitCode mirror...${NC}"
+        print_message info "URL: $download_url"
+        
+        local download_dest="$script_dir/$rg_filename"
+        if curl -L -o "$download_dest" "$download_url"; then
+            rg_tarball="$download_dest"
+            print_message info "Download successful."
+        else
+            print_message warning "Failed to download ripgrep from GitCode."
+        fi
+    fi
 
     if [ -n "$rg_tarball" ] && [ -f "$rg_tarball" ]; then
         print_message info "${MUTED}Found local ripgrep package: ${NC}$(basename "$rg_tarball")"
@@ -299,6 +342,10 @@ install_ripgrep() {
         if [ -n "$rg_bin" ]; then
             mv "$rg_bin" "$INSTALL_DIR/"
             chmod 755 "$INSTALL_DIR/rg"
+            # Remove quarantine attribute on macOS to prevent security blocking
+            if [ "$os" = "darwin" ]; then
+                xattr -d com.apple.quarantine "$INSTALL_DIR/rg" 2>/dev/null || true
+            fi
             print_message info "${MUTED}Successfully installed ${NC}ripgrep (rg)${MUTED} from local file."
         else
             print_message error "Could not find 'rg' binary in the archive."
@@ -310,7 +357,7 @@ install_ripgrep() {
         if ! command -v rg >/dev/null 2>&1; then
              print_message warning "ripgrep (rg) not found. OpenCode requires it and may try to download it at runtime."
              print_message info "To avoid runtime download errors, you can:"
-             print_message info "1. Download: https://github.com/BurntSushi/ripgrep/releases/download/14.1.1/ripgrep-14.1.1-x86_64-unknown-linux-musl.tar.gz"
+             print_message info "1. Download: $download_url"
              print_message info "2. Place it in: $script_dir/"
              print_message info "3. Re-run this installation script."
         fi
@@ -372,8 +419,20 @@ for file in $config_files; do
 done
 
 if [[ -z $config_file ]]; then
-    print_message error "No config file found for $current_shell. Checked files: ${config_files[@]}"
-    exit 1
+    # Fallback: Create default config file if none exists
+    case $current_shell in
+        zsh) config_file="$HOME/.zshrc" ;;
+        bash) config_file="$HOME/.bashrc" ;;
+        fish) config_file="$HOME/.config/fish/config.fish" ;;
+        *) config_file="$HOME/.profile" ;;
+    esac
+    
+    print_message warning "No existing config file found for $current_shell."
+    print_message info "Creating default config file: $config_file"
+    
+    # Ensure directory exists (important for fish or xdg paths)
+    mkdir -p "$(dirname "$config_file")"
+    touch "$config_file"
 fi
 
 if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then
@@ -404,6 +463,16 @@ fi
 if [ -n "${GITHUB_ACTIONS-}" ] && [ "${GITHUB_ACTIONS}" == "true" ]; then
     echo "$INSTALL_DIR" >> $GITHUB_PATH
     print_message info "Added $INSTALL_DIR to \$GITHUB_PATH"
+fi
+
+# Refresh configuration
+if [ -n "$config_file" ] && [ -f "$config_file" ]; then
+    print_message info "Sourcing configuration file: $config_file"
+    # Temporarily disable exit on error for sourcing, as user config might have unrelated issues
+    set +e
+    source "$config_file" >/dev/null 2>&1
+    set -e
+    print_message info "Configuration refreshed."
 fi
 
 echo -e ""
