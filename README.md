@@ -79,6 +79,16 @@
 
 ### 1. 下载安装脚本（github\gitcode）
 
+**注意**
+
+```java
+cd /
+mkdir dev-ops
+cd dev-ops
+```
+
+之后在执行 git clone 操作，不要在 ~ 目录下，会有 root 权限。
+
 ```java
 $ git clone https://github.com/fuzhengwei/xfg-dev-tech-docker-install.git
 $ git clone https://gitcode.com/Yao__Shun__Yu/xfg-dev-tech-docker-install.git
