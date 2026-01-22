@@ -119,6 +119,17 @@ $ find . -name "*.sh" -type f -exec chmod +x {} \;
 $ ./run_install_docker.sh # 支持 Ubuntu/CentOS
 ```
 
+docker 常用命令；
+
+- docker --version          # 查看Docker版本
+- docker ps                 # 查看运行中的容器
+- docker images             # 查看本地镜像
+- docker pull hello-world   # 拉取测试镜像
+- docker run hello-world    # 运行测试容器
+- docker rm nginx           # 删除服务
+- docker rmi nginx          # 删除镜像
+- docker exec -it nginx /bin/bash # 进入服务
+
 ### 5. 安装开发软件 (MySQL, Redis, Nacos 等)
 
 ```java
