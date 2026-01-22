@@ -46,10 +46,6 @@
 
 ## 一、优惠云服务器地址
 
-<div align="center">
-    <img src="https://bugstack.cn/images/roadmap/tutorial/road-map-docker-install-01.png" width="400px">
-</div>
-
 - 购买地址：[https://618.gaga.plus](https://618.gaga.plus)
 - 购买地址：[https://618.gaga.plus](https://618.gaga.plus)
 - 购买地址：[https://618.gaga.plus](https://618.gaga.plus)
