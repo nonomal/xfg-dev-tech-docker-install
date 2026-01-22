@@ -154,12 +154,6 @@ $ ./environment/maven/install-maven.sh
 ./terminal.sh
 ```
 
-### 9. 安装 Terminal AI 工具
-
-```java
-./terminal.sh
-```
-
 - https://github.com/sst/opencode
 - https://github.com/BurntSushi/ripgrep/releases/
 
