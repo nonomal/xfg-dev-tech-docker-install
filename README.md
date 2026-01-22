@@ -9,7 +9,7 @@
 
 说实话，做项目不上线，等于吃面不配蒜🧄，效果少一半！面试官也说：“所有做Java编程项目，没有上线云服务器的，一律当玩具看！” 是呀，做完项目不上线，是不你做的项目没法运行，是个小卡拉米练手的？🤔 那怎么办？
 
-其实，上线云服务器非常非常简单，而且云服务器价格也非常非常便宜！趁618活动月，**28块钱**，都能买一年的云服务器☁️，干嘛不上车！
+其实，上线云服务器非常非常简单，而且云服务器价格也非常非常便宜！干嘛不上车！
 
 <div align="center">
     <img src="https://bugstack.cn/images/system/zsxq/xingqiu-231018-00.png" width="200px">
@@ -56,13 +56,12 @@
 
 **我适合买哪个服务器？**
 
-- 2c2g 1年，28￥，可部署一套 docker、mysql、redis、SpringBoot 单体项目，用于替代本地电脑的环境部署。
-- 2c4g 1年（非常推荐3年），109￥，可部署一套 docker、mysql、redis、rabbitmq、xxl-job、SpringBoot 分布式微服务项目。 
-- 2c8g 1年，328￥，适合部署小傅哥星球社群[大部分项目](https://bugstack.cn/md/zsxq/material/student-learn-advanced.html)，可以完成多个微服务项目部署。
+- 2c4g 1年+送3个月（腾讯云），109￥，可部署一套 docker、mysql、redis、rabbitmq、xxl-job、SpringBoot 分布式微服务项目。 
+- 2c4g 3年，528￥，适合部署小傅哥星球社群[大部分项目](https://bugstack.cn/md/zsxq/material/student-learn-advanced.html)，可以完成多个微服务项目部署。
 
-注意📢：购买选择系统时，推荐系统镜像，**centos 7.9**、**Ubuntu 24+** SSH 链接工具：[SSH Tool](https://bugstack.cn/md/road-map/tool.html)
+注意📢：购买选择系统时，推荐系统镜像，**Ubuntu 24+**、**centos 7.9** SSH 链接工具：[SSH Tool](https://bugstack.cn/md/road-map/tool.html)
 
->如果自己账号不是新人身份，可以自己注册个新账号，用家里人JD扫码认证一下即可。
+>如果自己账号不是新人身份，可以自己注册个新账号，用家里人扫码认证一下即可。
 
 ## 二、一键部署脚本
 
@@ -77,7 +76,25 @@
 
 本文档介绍如何执行项目中的各个脚本，包括权限设置和执行步骤。操作视频：[https://www.bilibili.com/video/BV1oaNazEEf5](https://www.bilibili.com/video/BV1oaNazEEf5)
 
-### 1. 下载安装脚本（github\gitcode）
+## 1. 安装Git
+
+**Centos**
+
+```java
+# sudo yum install git
+```
+
+**Ubuntu**
+
+```java
+# sudo apt update
+# sudo apt install nodejs npm
+# node -v
+# npm -v
+# apt-get install git
+```
+
+### 2. 下载安装脚本（github\gitcode）
 
 **注意**
 
@@ -90,38 +107,43 @@ cd dev-ops
 之后在执行 git clone 操作，不要在 ~ 目录下，会有 root 权限。
 
 ```java
-$ git clone https://github.com/fuzhengwei/xfg-dev-tech-docker-install.git
 $ git clone https://gitcode.com/Yao__Shun__Yu/xfg-dev-tech-docker-install.git
+$ git clone https://github.com/fuzhengwei/xfg-dev-tech-docker-install.git
 ```
-### 2. 为所有脚本添加可执行权限
+### 3. 为所有脚本添加可执行权限
 
 ```java
 $ find . -name "*.sh" -type f -exec chmod +x {} \;
 ```
 
-### 3. 安装 Docker (选择对应系统)
+### 4. 安装 Docker (会自动选择对应系统)
 
 ```java
-$ ./centos_run_install_docker_local.sh # CentOS
-$ ./ubuntu_run_install_docker_local.sh # Ubuntu
+$ ./run_install_docker.sh # 支持 Ubuntu/CentOS
 ```
 
-### 4. 安装开发软件 (MySQL, Redis, Nacos 等)
+### 5. 安装开发软件 (MySQL, Redis, Nacos 等)
 
 ```java
-$ sudo ./run_install_software.sh
+$ ./run_install_software.sh
 ```
 
-### 5. 安装 JDK (可选，支持 8/17) - 查看帮助文档，Ubuntu 使用 apt 命令安装
+### 6. 安装 JDK (可选，支持 8/17) - 查看帮助文档，Ubuntu 使用 apt 命令安装
 
 ```java
-$ sudo ./environment/jdk/install-java.sh -v 8
+$ ./environment/jdk/install-java.sh -v 8
 ```
 
-### 6. 安装 Maven - 查看帮助文档，Ubuntu 使用 apt 命令安装
+### 7. 安装 Maven - 查看帮助文档，Ubuntu 使用 apt 命令安装
 
 ```java
-$ sudo ./environment/maven/install-maven.sh
+$ ./environment/maven/install-maven.sh
+```
+
+## 5. 安装 Terminal AI 工具(安装时候，推荐使用 opencode)
+
+```java
+./terminal.sh
 ```
 
 ### 7. 安装 Terminal AI 工具
@@ -129,6 +151,11 @@ $ sudo ./environment/maven/install-maven.sh
 ```java
 ./terminal.sh
 ```
+
+- https://github.com/sst/opencode
+- https://github.com/BurntSushi/ripgrep/releases/
+
+>terminal.sh 脚本安装，已将 opencode、ripgrep 所需内容做好了镜像。让你可以便捷安装。
 
 ---
 

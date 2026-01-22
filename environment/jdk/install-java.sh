@@ -564,6 +564,14 @@ main() {
     fi
     
     log_success "JDK $JDK_VERSION_NUMBER 安装完成!"
+    
+    # 最后提示用户如何验证
+    if [[ $SILENT_MODE == false ]]; then
+        echo
+        log_info "请在新终端中执行 'java -version' 验证安装"
+        log_info "如果命令不生效，请执行: source /etc/profile"
+        echo
+    fi
 }
 
 # 错误处理
