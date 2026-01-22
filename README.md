@@ -148,13 +148,13 @@ $ ./environment/jdk/install-java.sh -v 8
 $ ./environment/maven/install-maven.sh
 ```
 
-## 5. 安装 Terminal AI 工具(安装时候，推荐使用 opencode)
+### 8. 安装 Terminal AI 工具(安装时候，推荐使用 opencode)
 
 ```java
 ./terminal.sh
 ```
 
-### 7. 安装 Terminal AI 工具
+### 9. 安装 Terminal AI 工具
 
 ```java
 ./terminal.sh
