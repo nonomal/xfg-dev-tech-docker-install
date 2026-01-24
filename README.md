@@ -73,6 +73,8 @@
 
 本文档介绍如何执行项目中的各个脚本，包括权限设置和执行步骤。操作视频：[https://www.bilibili.com/video/BV1oaNazEEf5](https://www.bilibili.com/video/BV1oaNazEEf5)
 
+📢 如果执行过程中没有权限，可以在命令前加一个 `sudo` 如 `sudo yum install git`
+
 ## 1. 安装Git
 
 **Centos**
