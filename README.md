@@ -75,7 +75,7 @@
 
 📢 如果执行过程中没有权限，可以在命令前加一个 `sudo` 如 `sudo yum install git`
 
-## 1. 安装Git
+### 1. 安装Git
 
 **Centos**
 
