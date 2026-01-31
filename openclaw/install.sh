@@ -21,6 +21,15 @@ DEFAULT_TAGLINE="All your chats, one OpenClaw."
 ORIGINAL_PATH="${PATH:-}"
 
 export NPM_CONFIG_REGISTRY=https://registry.npmmirror.com
+export SHARP_BINARY_HOST=https://npmmirror.com/mirrors/sharp
+export SHARP_LIBVIPS_BINARY_HOST=https://npmmirror.com/mirrors/sharp-libvips
+export PUPPETEER_DOWNLOAD_HOST=https://npmmirror.com/mirrors
+export ELECTRON_MIRROR=https://npmmirror.com/mirrors/electron/
+export SASS_BINARY_SITE=https://npmmirror.com/mirrors/node-sass
+export HOMEBREW_API_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles/api"
+export HOMEBREW_BOTTLE_DOMAIN="https://mirrors.ustc.edu.cn/homebrew-bottles"
+export HOMEBREW_BREW_GIT_REMOTE="https://mirrors.ustc.edu.cn/brew.git"
+export HOMEBREW_CORE_GIT_REMOTE="https://mirrors.ustc.edu.cn/homebrew-core.git"
 export npm_config_cache="$(mktemp -d)"
 
 TMPFILES=()
@@ -506,7 +515,7 @@ install_homebrew() {
     if [[ "$OS" == "macos" ]]; then
         if ! command -v brew &> /dev/null; then
             echo -e "${WARN}→${NC} Installing Homebrew..."
-            run_remote_bash "https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
+            run_remote_bash "https://cdn.jsdelivr.net/gh/Homebrew/install@HEAD/install.sh"
 
             # Add Homebrew to PATH for this session
             if [[ -f "/opt/homebrew/bin/brew" ]]; then
