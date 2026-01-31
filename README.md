@@ -46,7 +46,7 @@
 
 ## 一、优惠云服务器地址
 
-- 购买地址：[https://618.gaga.plus](https://618.gaga.plus) 
+- 购买地址：[https://618.gaga.plus](https://618.gaga.plus)
 - 购买地址：[https://618.gaga.plus](https://618.gaga.plus)
 - 购买地址：[https://618.gaga.plus](https://618.gaga.plus)
 
@@ -56,9 +56,7 @@
 - 2c4g 3年，528￥，适合部署小傅哥星球社群[大部分项目](https://bugstack.cn/md/zsxq/material/student-learn-advanced.html)，可以完成多个微服务项目部署。
 - 温馨提示，2c2g 基本不够做什么用的，4c4g 大部分都是共用资源，可能有卡顿，跑不到4c4g。
 
----
-
-注意📢：购买选择系统时，推荐系统镜像，**Ubuntu 24+**、**centos 7.9** SSH 链接工具：[SSH Tool](https://bugstack.cn/md/road-map/tool.html) 可参考 [使用视频 📺 手把手教你购买和部署](https://www.bilibili.com/video/BV1oaNazEEf5)
+注意📢：购买选择系统时，推荐系统镜像，**Ubuntu 24+**、**centos 7.9** SSH 链接工具：[SSH Tool](https://bugstack.cn/md/road-map/tool.html)
 
 >如果自己账号不是新人身份，可以自己注册个新账号，用家里人扫码认证一下即可。
 
