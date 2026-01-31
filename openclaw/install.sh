@@ -954,7 +954,7 @@ EOF
 # Install OpenClaw
 resolve_beta_version() {
     local beta=""
-    beta="$(npm view openclaw dist-tags.beta 2>/dev/null || true)"
+    beta="$(npm view openclaw dist-tags.beta --registry=https://registry.npmmirror.com 2>/dev/null || true)"
     if [[ -z "$beta" || "$beta" == "undefined" || "$beta" == "null" ]]; then
         return 1
     fi
@@ -1059,7 +1059,7 @@ install_openclaw() {
     fi
 
     local resolved_version=""
-    resolved_version="$(npm view "${package_name}@${OPENCLAW_VERSION}" version 2>/dev/null || true)"
+    resolved_version="$(npm view "${package_name}@${OPENCLAW_VERSION}" version --registry=https://registry.npmmirror.com 2>/dev/null || true)"
     if [[ -n "$resolved_version" ]]; then
         echo -e "${WARN}→${NC} Installing OpenClaw ${INFO}${resolved_version}${NC}..."
     else
