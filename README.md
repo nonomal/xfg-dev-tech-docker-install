@@ -161,6 +161,13 @@ $ ./environment/maven/install-maven.sh
 
 >terminal.sh 脚本安装，已将 opencode、ripgrep 所需内容做好了镜像。让你可以便捷安装。
 
+### 9. openclaw 大龙虾
+
+```java
+sudo ./openclaw.sh
+sudo ./openclaw-cn.sh
+```
+
 ---
 
 关于如何使用 Docker 部署项目教程；[https://bugstack.cn/md/road-map/docker-deploy-project.html](https://bugstack.cn/md/road-map/docker-deploy-project.html)
