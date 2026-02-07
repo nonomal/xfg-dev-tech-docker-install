@@ -1,0 +1,1 @@
+curl -fsSL https://clawd.org.cn/install.sh | sudo bash -s -- --registry https://registry.npmmirror.com
