@@ -40,7 +40,7 @@ install_node() {
                 echo "错误：CentOS/RHEL 7 系统 GLIBC 版本过低(2.17)，无法运行 Node.js 22 (需要 GLIBC 2.28+)。"
                 echo "openclaw 需要 Node.js 22+ 环境。"
                 echo "建议方案："
-                echo "1. 升级操作系统至 CentOS 8/9 或使用 Ubuntu 20.04+。"
+                echo "1. 升级操作系统至 CentOS 8/9 或使用 Ubuntu 22+。"
                 echo "2. 使用 Docker 容器运行 openclaw。"
                 exit 1
             fi
@@ -95,8 +95,15 @@ fi
 
 # Install openclaw function
 install_openclaw_pkg() {
-    echo "正在运行 openclaw 安装..."
-    sudo npm install -g openclaw@latest --registry https://registry.npmmirror.com
+    read -p "是否确认安装 openclaw？(y/n) " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        echo "正在运行 openclaw 安装..."
+        sudo npm install -g openclaw@latest --registry https://registry.npmmirror.com
+    else
+        echo "取消安装。"
+        return 1
+    fi
 }
 
 # Install feishu plugin function
