@@ -118,7 +118,7 @@ $ find . -name "*.sh" -type f -exec chmod +x {} \;
 ### 4. 安装 Docker (会自动选择对应系统)
 
 ```java
-$ ./run_install_docker.sh # 支持 Ubuntu/CentOS
+$ sudo ./run_install_docker.sh # 支持 Ubuntu/CentOS
 ```
 
 docker 常用命令；
@@ -135,25 +135,25 @@ docker 常用命令；
 ### 5. 安装开发软件 (MySQL, Redis, Nacos 等)
 
 ```java
-$ ./run_install_software.sh
+$ sudo ./run_install_software.sh
 ```
 
 ### 6. 安装 JDK (可选，支持 8/17) - 查看帮助文档，Ubuntu 使用 apt 命令安装
 
 ```java
-$ ./environment/jdk/install-java.sh -v 8
+$ sudo ./environment/jdk/install-java.sh -v 8
 ```
 
 ### 7. 安装 Maven - 查看帮助文档，Ubuntu 使用 apt 命令安装
 
 ```java
-$ ./environment/maven/install-maven.sh
+$ sudo ./environment/maven/install-maven.sh
 ```
 
 ### 8. 安装 Terminal AI 工具(安装时候，推荐使用 opencode)
 
 ```java
-./terminal.sh
+sudo ./terminal.sh
 ```
 
 - https://github.com/sst/opencode
