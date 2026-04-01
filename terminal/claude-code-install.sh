@@ -2,8 +2,8 @@
 
 set -e
 
-# Parse command line arguments
 TARGET="$1"  # Optional target parameter
+REGISTRY_URL="https://registry.npmmirror.com"
 
 # Validate target if provided
 if [[ -n "$TARGET" ]] && [[ ! "$TARGET" =~ ^(stable|latest|[0-9]+\.[0-9]+\.[0-9]+(-[^[:space:]]+)?)$ ]]; then
@@ -137,9 +137,8 @@ fi
 
 chmod +x "$binary_path"
 
-# Run claude install to set up launcher and shell integration
 echo "Setting up Claude Code..."
-"$binary_path" install ${TARGET:+"$TARGET"}
+"$binary_path" install ${TARGET:+"$TARGET"} --registry "$REGISTRY_URL"
 
 # Clean up downloaded file
 rm -f "$binary_path"

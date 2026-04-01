@@ -249,7 +249,7 @@ services:
       - my-network
 
   pgvector:
-    image: pgvector/pgvector:0.7.4-pg16
+    image: pgvector/pgvector:pg17
     container_name: pgvector
     restart: always
     environment:

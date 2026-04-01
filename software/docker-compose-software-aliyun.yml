@@ -205,7 +205,7 @@ services:
 
   # 软件；https://www.postgresql.org/ftp/pgadmin/pgadmin4
   pgvector:
-    image: registry.cn-hangzhou.aliyuncs.com/xfg-studio/pgvector:v0.5.0
+    image: registry.cn-hangzhou.aliyuncs.com/xfg-studio/pgvector:pg17
     container_name: pgvector
     restart: always
     environment:
